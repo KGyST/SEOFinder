@@ -12,7 +12,6 @@
 
 #define	_ELEMENT_TEST_TRANSL_
 
-
 // ---------------------------------- Includes ---------------------------------
 
 #include	"APIEnvir.h"

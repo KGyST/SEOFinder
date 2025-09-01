@@ -25,6 +25,14 @@
       <Configuration>Release 26</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug 27|x64">
+      <Configuration>Debug 27</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release 27|x64">
+      <Configuration>Release 27</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug 24'">
     <ACVersion>24</ACVersion>
@@ -50,47 +58,51 @@
     <ACVersion>26</ACVersion>
     <BuildType>Release</BuildType>
   </PropertyGroup>
-  <PropertyGroup Label="UserMacros">
-    <ACDevKit>..\ArchiCAD_API\API Development Kit $(ACVersion)</ACDevKit>
-    <ACDevKitSupport>$(ACDevKit)\Support</ACDevKitSupport>
-    <ACDevKitModules>$(ACDevKitSupport)\Modules</ACDevKitModules>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug 27'">
+    <ACVersion>27</ACVersion>
+    <BuildType>Debug</BuildType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release 27'">
+    <ACVersion>27</ACVersion>
+    <BuildType>Release</BuildType>
+  </PropertyGroup>
+  <!-- ACVersion must be defined -->
+  <Import Project="..\local.props" Condition="Exists('..\local.props')" />
+  <Import Project="local.props" Condition="!Exists('..\local.props')" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{57C427C8-56A0-4CC2-96B7-ECDC64698CF2}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ACVersion)'=='24'" Label="Globals">
-    <ProjectGuid>{57C427C8-56A0-4CC2-96B7-ECDC64698CF2}</ProjectGuid>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ACVersion)'=='25'" Label="Globals">
-    <ProjectGuid>{57C427C8-56A0-4CC2-96B7-ECDC64698CF2}</ProjectGuid>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(ACVersion)'=='26'" Label="Globals">
-    <ProjectGuid>{57C427C8-56A0-4CC2-96B7-ECDC64698CF2}</ProjectGuid>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(ACVersion)'=='27'" Label="Globals">
+    <WindowsTargetPlatformVersion>10</WindowsTargetPlatformVersion>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)'=='Debug 24'" Label="Configuration">
+  <PropertyGroup Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ACVersion)'=='24'" Label="Configuration">
     <PlatformToolset>v141</PlatformToolset>
+    <WinCorr>\Win</WinCorr>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Release 24'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Debug 25'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v143</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Release 25'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v143</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Debug 26'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  <PropertyGroup Condition="'$(ACVersion)'=='25'" Label="Configuration">
     <PlatformToolset>v142</PlatformToolset>
+    <WinCorr>\Win</WinCorr>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Release 26'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  <PropertyGroup Condition="'$(ACVersion)'=='26'" Label="Configuration">
     <PlatformToolset>v142</PlatformToolset>
+    <WinCorr>\Win</WinCorr>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(ACVersion)'=='27'" Label="Configuration">
+    <PlatformToolset>v142</PlatformToolset>
+    <WinCorr />
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -115,8 +127,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-	  <PreprocessorDefinitions>ACVER=$(ACVersion);WIN32;WINDOWS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ACDevKitSupport)\Inc;$(ACDevKitModules)\GSRoot;$(ACDevKitModules)\RS;$(ACDevKitModules)\InputOutput;$(ACDevKitModules)\GSUtils</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ACVER=$(ACVersion);WIN32;WINDOWS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
@@ -147,7 +158,7 @@
       <AdditionalOptions>/export:GetExportedFuncAddrs,%401 /export:SetImportedFuncAddrs,%402 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug 24'">
+  <ItemDefinitionGroup Condition="'$(BuildType)'=='Debug'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -160,7 +171,7 @@
       <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release 24'">
+  <ItemDefinitionGroup Condition="'$(BuildType)'=='Release'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -171,53 +182,32 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug 25'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-    </ClCompile>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release 24'">
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release 25'">
     <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
-    <Link>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug 26'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release 26'">
-    <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-    </ClCompile>
     <Link>
-      <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(ACVersion)'=='26'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ACDevKitSupport)\Inc;$(ACDevKitModules)\GSRoot;$(ACDevKitModules)\RS;$(ACDevKitModules)\InputOutput;$(ACDevKitModules)\GSUtils</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(ACVersion)'=='27'">
+    <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ACDevKitSupport)\Inc;$(ACDevKitModules)\RS;$(ACDevKitModules)\DGLib;$(ACDevKitModules)\GSRoot;$(ACDevKitModules)\GSUtils;$(ACDevKitModules)\GSModeler;$(ACDevKitModules)\InputOutput;$(ACDevKitModules)\CADInfrastructureBase;$(ACDevKitModules)\Geometry</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\$(ProjectName).cpp" />
@@ -253,10 +243,10 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <Library Condition="'$(BuildType)'=='Debug'" Include="$(ACDevKitSupport)\Lib\Win\ACAP_STATD.lib">
+    <Library Condition="'$(BuildType)'=='Debug'" Include="$(ACDevKitSupport)\Lib$(WinCorr)\ACAP_STATD.lib">
       <FileType>Document</FileType>
     </Library>
-    <Library Condition="'$(BuildType)'=='Release'" Include="$(ACDevKitSupport)\Lib\Win\ACAP_STAT.lib">
+    <Library Condition="'$(BuildType)'=='Release'" Include="$(ACDevKitSupport)\Lib$(WinCorr)\ACAP_STAT.lib">
       <FileType>Document</FileType>
     </Library>
     <Library Include="$(ACDevKitModules)\GSRoot\Win\GSRootImp.lib">
@@ -280,12 +270,26 @@
     <Library Condition="'$(ACVersion)'=='26'" Include="$(ACDevKitModules)\RS\Win\RSImp.lib">
       <FileType>Document</FileType>
     </Library>
+    <Library Condition="'$(ACVersion)'=='27'" Include="$(ACDevKitModules)\RS\Win\RSImp.lib">
+      <FileType>Document</FileType>
+    </Library>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\APICommon.h" />
     <ClInclude Include="Src\SEOFinder.h" />
+    <ClInclude Include="..\CPPCommonLibs\AC27.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ItemGroup>
+    <Natvis Include="$(NatVisRoot)\Brep.natvis" />
+    <Natvis Include="$(NatVisRoot)\DynamicObject.natvis" />
+    <Natvis Include="$(NatVisRoot)\Geometry.natvis" />
+    <Natvis Include="$(NatVisRoot)\GS.natvis" />
+    <Natvis Include="$(NatVisRoot)\GSModeler.natvis" />
+    <Natvis Include="$(NatVisRoot)\GSXML.natvis" />
+    <Natvis Include="$(NatVisRoot)\IO.natvis" />
+    <Natvis Include="$(NatVisRoot)\ODB.natvis" />
+  </ItemGroup>
 </Project>

@@ -8,8 +8,13 @@
 // [SG compatible] - Yes
 // *****************************************************************************
 
-#if !defined _ELEMENT_TEST_H
-#define _ELEMENT_TEST_H
+#if !defined _SEO_FINDER_H
+#define _SEO_FINDER_H
+
+#if ACVER == 27
+//#include	"ACAPI_MigrationHeader.hpp"
+#include	"..\..\CPPCommonLibs\AC27.hpp"
+#endif
 
 void	Do_SolidOperation_Create (void);
 void	Do_SolidLink_Create (void);
